@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/codeborne/i18n-json/issues"
   },
-  "homepage": "https://github.com/codeborne/i18n-json#readme"
+  "homepage": "https://github.com/codeborne/i18n-json#readme",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
 }
