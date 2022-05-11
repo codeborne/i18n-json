@@ -1,0 +1,26 @@
+{
+  "name": "i18n-json",
+  "version": "0.1.0",
+  "description": "Simple json-based translations",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeborne/i18n-json.git"
+  },
+  "keywords": [
+    "i18n",
+    "translation",
+    "localization",
+    "internationalization"
+  ],
+  "author": "Anton Keks",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codeborne/i18n-json/issues"
+  },
+  "homepage": "https://github.com/codeborne/i18n-json#readme"
+}
