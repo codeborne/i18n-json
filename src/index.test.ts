@@ -1,4 +1,4 @@
-import {_, detectLang, ensureSupportedLang, formatAmount, formatCurrency, formatDate, formatDateTime, rememberLang} from './i18n'
+import {_, ensureSupportedLang, formatAmount, formatCurrency, formatDate, formatDateTime, rememberLang, detectLang} from './index'
 import {expect} from 'chai'
 
 test('translate', () => {
