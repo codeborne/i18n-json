@@ -1,8 +1,13 @@
-import {_, ensureSupportedLang, formatAmount, formatCurrency, formatDate, formatDateTime, rememberLang, detectLang} from './index'
+import {_, ensureSupportedLang, formatAmount, formatCurrency, formatDate, formatDateTime, rememberLang, detectLang, init} from './index'
 import {expect} from 'chai'
 import {describe} from 'mocha'
+import langs from '../sample/langs.json'
 
 describe('i18n', () => {
+  before(() => {
+    init(langs)
+  })
+
   it('translate', () => {
     expect(_('contacts.email')).to.equal('E-mail')
   })

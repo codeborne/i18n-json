@@ -1,3 +1,4 @@
 /src
 /sample
+/build/sample
 *.test.*

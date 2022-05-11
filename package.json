@@ -2,8 +2,8 @@
   "name": "i18n-json",
   "version": "0.1.0",
   "description": "Simple json-based translations with no dependencies",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "build/src/index.js",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "build": "rm -fr build && tsc",
     "prepublish": "npm run build",
