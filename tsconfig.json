@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
+    "outDir": "build",
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "baseUrl": ".",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -15,6 +16,7 @@
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true
+    "strictPropertyInitialization": true,
+    "declaration": true
   }
 }
