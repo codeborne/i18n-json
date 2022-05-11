@@ -1,14 +1,13 @@
 {
   "name": "i18n-json",
   "version": "0.1.0",
-  "description": "Simple json-based translations",
-  "type": "module",
-  "main": "build/src/i18n.js",
-  "types": "build/src/i18n.d.ts",
+  "description": "Simple json-based translations with no dependencies",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "prepublish": "tsc",
-    "test": "mocha 'build/**/*.test.js'"
+    "build": "rm -fr build && tsc",
+    "prepublish": "npm run build",
+    "test": "npm run build && mocha 'build/**/*.test.js'"
   },
   "repository": {
     "type": "git",
