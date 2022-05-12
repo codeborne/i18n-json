@@ -7,8 +7,8 @@ let dateTimeFormat: Intl.DateTimeFormat
 
 export function init(l: string) {
   lang = l
-  dateFormat = new Intl.DateTimeFormat(lang + '-GB', {day: '2-digit', month: '2-digit', year: 'numeric'})
-  dateTimeFormat = new Intl.DateTimeFormat(lang + '-GB', {day: 'numeric', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit'})
+  dateFormat = new Intl.DateTimeFormat(lang, {day: '2-digit', month: '2-digit', year: 'numeric'})
+  dateTimeFormat = new Intl.DateTimeFormat(lang, {day: 'numeric', month: '2-digit', year: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit'})
 }
 
 export function formatDate(d: Date_) {

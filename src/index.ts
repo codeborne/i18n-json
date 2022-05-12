@@ -7,5 +7,5 @@ export * from './formatters'
 
 export async function init(i: Init) {
   await i18n(i)
-  formatters(lang)
+  formatters(lang + '-GB')
 }
