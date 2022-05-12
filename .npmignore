@@ -1,6 +1,0 @@
-/src
-/sample
-/build/sample
-*.test.*
-/.*
-/tsconfig.json

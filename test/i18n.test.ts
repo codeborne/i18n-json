@@ -1,4 +1,4 @@
-import {_, detectLang, ensureSupportedLang, init, rememberLang} from './i18n'
+import {_, detectLang, ensureSupportedLang, init, rememberLang} from '../src/i18n'
 import {expect} from 'chai'
 import {describe} from 'mocha'
 import langs from '../sample/langs.json'

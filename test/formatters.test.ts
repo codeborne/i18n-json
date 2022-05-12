@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {init, formatAmount, formatCurrency, formatDate, formatDateTime} from './formatters'
+import {init, formatAmount, formatCurrency, formatDate, formatDateTime} from '../src/formatters'
 
 describe('formatters', () => {
   before(() => {
