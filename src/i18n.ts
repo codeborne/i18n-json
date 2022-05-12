@@ -1,38 +1,40 @@
-type Dict = Record<string, any>
+export type Dict = Record<string, any>
+
+export let jsonPath = '/i18n/'
+export let cookieName = 'LANG'
 
 export let langs = ['en']
 export let defaultLang = 'en'
 export let lang = defaultLang
 
-export let options = {
-  jsonPath: '/i18n/',
-  cookieName: 'LANG'
-}
-
 let dict: Dict = {}
 let fallback: Dict = dict
 
-export interface Init {
+export interface Options {
   langs: string[],
   defaultLang?: string,
   lang?: string,
   dicts?: {[lang: string]: Dict}
   selectLang?: () => string|undefined
+  jsonPath?: string
+  cookieName?: string
 }
 
-export async function init(i: Init) {
-  langs = i.langs
-  defaultLang = i.defaultLang ?? langs[0]
-  lang = i.lang ?? detectLang(i.selectLang)
-  if (i.dicts) {
-    dict = i.dicts[lang]
-    fallback = i.dicts[defaultLang]
+export async function init(opts: Options) {
+  langs = opts.langs
+  defaultLang = opts.defaultLang ?? langs[0]
+  lang = opts.lang ?? detectLang(opts.selectLang)
+  if (opts.jsonPath) jsonPath = opts.jsonPath
+  if (opts.cookieName) cookieName = opts.cookieName
+  if (opts.dicts) {
+    dict = opts.dicts[lang]
+    fallback = opts.dicts[defaultLang]
   }
   else await load()
 }
 
 export function detectLang(selectLang?: () => string|undefined, host = location.host, cookies = document.cookie) {
-  const fromCookie = cookies.split('; ').find(s => s.startsWith(options.cookieName + '='))?.split('=')?.[1]
+  const fromCookie = cookies.split('; ').find(s => s.startsWith(cookieName + '='))?.split('=')?.[1]
   const lang = ensureSupportedLang(fromCookie ?? selectLang?.() ?? navigator.language.split('-')[0])
   if (lang != fromCookie) rememberLang(lang)
   document.documentElement.setAttribute('lang', lang)
@@ -40,7 +42,7 @@ export function detectLang(selectLang?: () => string|undefined, host = location.
 }
 
 export function rememberLang(lang: string) {
-  document.cookie = `${options.cookieName}=${lang};path=/`
+  document.cookie = `${cookieName}=${lang};path=/`
 }
 
 async function load() {
@@ -54,7 +56,7 @@ async function load() {
 }
 
 function loadJson(lang: string) {
-  return fetch(`${options.jsonPath}${lang}.json?${window['version']}`).then(r => r.json())
+  return fetch(`${jsonPath}${lang}.json?${window['version']}`).then(r => r.json())
 }
 
 export function ensureSupportedLang(lang: string) {
