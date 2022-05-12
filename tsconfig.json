@@ -5,6 +5,7 @@
     "target": "esnext",
     "module": "commonjs",
     "moduleResolution": "node",
+    "types": ["node"],
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,

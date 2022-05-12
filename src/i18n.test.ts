@@ -1,11 +1,15 @@
-import {_, ensureSupportedLang, formatAmount, formatCurrency, formatDate, formatDateTime, rememberLang, detectLang, init} from './index'
+import {_, detectLang, ensureSupportedLang, init, rememberLang} from './i18n'
 import {expect} from 'chai'
 import {describe} from 'mocha'
 import langs from '../sample/langs.json'
+import en from '../sample/en.json'
 
 describe('i18n', () => {
-  before(() => {
-    init(langs)
+  before(async () => {
+    global.location = {host: 'hostname'} as Location
+    global.document = {cookie: '', documentElement: {setAttribute: (name, value) => {}}} as Document
+    global.navigator = {language: 'en-GB'} as Navigator
+    await init({langs, dicts: {en}})
   })
 
   it('translate', () => {
@@ -68,28 +72,5 @@ describe('i18n', () => {
     rememberLang('en')
     expect(document.cookie).to.contain('LANG=en')
     expect(detectLang()).to.eq('en')
-  })
-
-  it('formatDate', () => {
-    expect(formatDate('2021-06-02')).to.eq('02/06/2021')
-  })
-
-  it('formatDateTime', () => {
-    expect(formatDateTime(undefined)).to.equal('')
-    expect(formatDateTime(new Date())).to.contain(new Date().getFullYear().toString())
-    expect(formatDateTime(123)).to.contain('1970')
-    expect(formatDateTime('2020-01-01T10:23:45.010101')).to.eq('1/01/2020, 10:23:45')
-  })
-
-  it('formatAmount', () => {
-    expect(formatAmount({amount: 123, currency: 'EUR'})).to.eq('€123.00')
-    expect(formatAmount({amount: 456.567}, 'USD')).to.eq('$456.57')
-    expect(formatAmount(456.567, 'GBP')).to.eq('£456.57')
-    expect(formatAmount(null as any, 'EUR')).to.eq('€0.00')
-  })
-
-  it('formatCurrency', () => {
-    expect(formatCurrency('EUR')).to.eq('€')
-    expect(formatCurrency('USD')).to.eq('$')
   })
 })
