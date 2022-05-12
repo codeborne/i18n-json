@@ -54,15 +54,15 @@ describe('i18n', () => {
   })
 
   it('first selected language is according to the domain', () => {
-    expect(detectLang('', 'LANG=et')).to.eq('et')
+    expect(detectLang(undefined, '', 'LANG=et')).to.eq('et')
 
-    expect(detectLang('', '')).to.eq('en')
+    expect(detectLang(undefined, '', '')).to.eq('en')
     expect(document.cookie).to.contain('LANG=en')
 
-    expect(detectLang('tenor.ee', '')).to.eq('et')
+    expect(detectLang(undefined, 'tenor.ee', '')).to.eq('et')
     expect(document.cookie).to.contain('LANG=et')
 
-    expect(detectLang('tenor.lv', '')).to.eq('en') // lv is unsupported for now
+    expect(detectLang(undefined, 'tenor.lv', '')).to.eq('en') // lv is unsupported for now
   })
 
   it('language is saved to cookie and url is replaced', () => {

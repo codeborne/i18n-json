@@ -1,6 +1,6 @@
 {
   "name": "@codeborne/i18n-json",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple json-based translations with no dependencies",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",

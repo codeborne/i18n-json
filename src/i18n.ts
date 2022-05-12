@@ -17,12 +17,13 @@ export interface Init {
   defaultLang?: string,
   lang?: string,
   dicts?: {[lang: string]: Dict}
+  selectLang?: () => string|undefined
 }
 
 export async function init(i: Init) {
   langs = i.langs
   defaultLang = i.defaultLang ?? langs[0]
-  lang = i.lang ?? detectLang()
+  lang = i.lang ?? detectLang(i.selectLang)
   if (i.dicts) {
     dict = i.dicts[lang]
     fallback = i.dicts[defaultLang]
@@ -30,9 +31,9 @@ export async function init(i: Init) {
   else await load()
 }
 
-export function detectLang(host = location.host, cookies = document.cookie) {
+export function detectLang(selectLang?: () => string|undefined, host = location.host, cookies = document.cookie) {
   const fromCookie = cookies.split('; ').find(s => s.startsWith(options.cookieName + '='))?.split('=')?.[1]
-  const lang = ensureSupportedLang(fromCookie ?? navigator.language.split('-')[0])
+  const lang = ensureSupportedLang(fromCookie ?? selectLang?.() ?? navigator.language.split('-')[0])
   if (lang != fromCookie) rememberLang(lang)
   document.documentElement.setAttribute('lang', lang)
   return lang
