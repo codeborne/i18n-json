@@ -1,9 +1,9 @@
 import {expect} from 'chai'
-import {init, formatAmount, formatCurrency, formatDate, formatDateTime} from '../src/formatters'
+import {init, formatAmount, formatCurrency, formatDate, formatDateTime} from '../src/formatters.js'
 
 describe('formatters', () => {
   before(() => {
-    init('en')
+    init('en-GB')
   })
 
   it('formatDate', () => {
@@ -19,13 +19,13 @@ describe('formatters', () => {
 
   it('formatAmount', () => {
     expect(formatAmount({amount: 123, currency: 'EUR'})).to.eq('€123.00')
-    expect(formatAmount({amount: 456.567}, 'USD')).to.eq('$456.57')
+    expect(formatAmount({amount: 456.567}, 'USD')).to.eq('US$456.57')
     expect(formatAmount(456.567, 'GBP')).to.eq('£456.57')
     expect(formatAmount(null as any, 'EUR')).to.eq('€0.00')
   })
 
   it('formatCurrency', () => {
     expect(formatCurrency('EUR')).to.eq('€')
-    expect(formatCurrency('USD')).to.eq('$')
+    expect(formatCurrency('USD')).to.eq('US$')
   })
 })

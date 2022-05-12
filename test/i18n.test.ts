@@ -1,8 +1,8 @@
-import {_, detectLang, ensureSupportedLang, init, rememberLang} from '../src/i18n'
+import {_, detectLang, ensureSupportedLang, init, rememberLang} from '../src/i18n.js'
 import {expect} from 'chai'
 import {describe} from 'mocha'
-import langs from '../sample/langs.json'
-import en from '../sample/en.json'
+import langs from '../sample/langs.json' assert {type: 'json'}
+import en from '../sample/en.json' assert {type: 'json'}
 
 describe('i18n', () => {
   before(async () => {
@@ -53,24 +53,15 @@ describe('i18n', () => {
     expect(_('key', {n: 0}, dict)).to.equal('')
   })
 
-  it('first selected language is according to the domain', () => {
-    expect(detectLang(undefined, '', 'LANG=et')).to.eq('et')
-
-    expect(detectLang(undefined, '', '')).to.eq('en')
-    expect(document.cookie).to.contain('LANG=en')
-
-    expect(detectLang(undefined, 'tenor.ee', '')).to.eq('et')
-    expect(document.cookie).to.contain('LANG=et')
-
-    expect(detectLang(undefined, 'tenor.lv', '')).to.eq('en') // lv is unsupported for now
-  })
-
   it('language is saved to cookie and url is replaced', () => {
     rememberLang('et')
     expect(document.cookie).to.contain('LANG=et')
+    document.cookie = 'LANG=et'
     expect(detectLang()).to.eq('et')
+
     rememberLang('en')
     expect(document.cookie).to.contain('LANG=en')
+    document.cookie = 'LANG=en'
     expect(detectLang()).to.eq('en')
   })
 })

@@ -1,7 +1,6 @@
 {
   "title": "Just a sample",
-  "nested": {
-    "hello": "Hello",
-    "world": "World"
+  "contacts": {
+    "email": "E-mail"
   }
 }
