@@ -1,4 +1,5 @@
 export type Dict = Record<string, any>
+export type Values = {[name: string]: any}
 
 export let jsonPath = '/i18n/'
 export let cookieName = 'LANG'
@@ -63,7 +64,7 @@ export function ensureSupportedLang(lang: string) {
   return langs.includes(lang) ? lang : defaultLang
 }
 
-export function _(key: string, values?: object, from: Dict = dict): string {
+export function _(key: string, values?: Values, from: Dict = dict): string {
   const keys = key.split('\.')
   let result: any = from
 
@@ -76,12 +77,12 @@ export function _(key: string, values?: object, from: Dict = dict): string {
   return result ?? key
 }
 
-export function __(key: string): string|undefined {
-  const result = _(key)
+export function __(key: string, values?: Values): string|undefined {
+  const result = _(key, values)
   return result != key ? result : undefined
 }
 
-function replaceValues(text: string, values: object) {
+function replaceValues(text: string, values: Values) {
   let lastPos = 0, bracePos = 0, result = ''
   while ((bracePos = text.indexOf('{', lastPos)) >= 0) {
     result += text.substring(lastPos, bracePos)
@@ -94,7 +95,7 @@ function replaceValues(text: string, values: object) {
   return result
 }
 
-function replacePlaceholder(text: string, values: object) {
+function replacePlaceholder(text: string, values: Values) {
   const pluralTokens = text.split('|')
   const field = pluralTokens[0]
   if (pluralTokens.length == 1) return values[field] ?? field
