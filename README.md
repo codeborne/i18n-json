@@ -16,6 +16,7 @@ In your project create a `i18n.ts` which will you use for imports:
 
 ```ts
 import langs from '../i18n/langs.json'
+import {init} from '@codeborne/i18n-json'
 export * from '@codeborne/i18n-json'
 
 export async function initTranslations() {
