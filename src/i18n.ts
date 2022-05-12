@@ -16,7 +16,7 @@ export interface Init {
   langs: string[],
   defaultLang?: string,
   lang?: string,
-  dicts: {[lang: string]: Dict}
+  dicts?: {[lang: string]: Dict}
 }
 
 export async function init(i: Init) {
