@@ -36,21 +36,21 @@ describe('i18n', () => {
       key: 'Testing {count|zero:nothing|one:a single translation|other:# translations!}',
       key2: 'Testing {count|zero:nothing|one:a single translation|other:# translations but don\'t \#change this!}'
     }
-    expect(_('key', {values: {count: 0}}, dict)).to.equal("Testing nothing")
-    expect(_('key', {values: {count: 1}}, dict)).to.equal("Testing a single translation")
-    expect(_('key', {values: {count: 5}}, dict)).to.equal("Testing 5 translations!")
-    expect(_('key2', {values: {count: 12}}, dict)).to.equal("Testing 12 translations but don't #change this!")
+    expect(_('key', {count: 0}, dict)).to.equal("Testing nothing")
+    expect(_('key', {count: 1}, dict)).to.equal("Testing a single translation")
+    expect(_('key', {count: 5}, dict)).to.equal("Testing 5 translations!")
+    expect(_('key2', {count: 12}, dict)).to.equal("Testing 12 translations but don't #change this!")
   })
 
   it('translate template with plurals and regular substitution', () => {
     const dict = {key: 'Tere {username}! You have {n|one:# message|other:# messages} since {date}'}
-    expect(_('key', {values: {n: 5, date: 'yesterday', username: 'Piret'}}, dict))
+    expect(_('key', {n: 5, date: 'yesterday', username: 'Piret'}, dict))
       .to.equal('Tere Piret! You have 5 messages since yesterday')
   })
 
   it('empty token', () => {
     const dict = {key: '{n|zero:|one:one|other:# messages}'}
-    expect(_('key', {values: {n: 0}}, dict)).to.equal('')
+    expect(_('key', {n: 0}, dict)).to.equal('')
   })
 
   it('first selected language is according to the domain', () => {

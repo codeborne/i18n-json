@@ -63,16 +63,16 @@ export function ensureSupportedLang(lang: string) {
   return langs.includes(lang) ? lang : defaultLang
 }
 
-export function _(key: string, options?: {values: object}, from: Dict = dict): string {
+export function _(key: string, values?: object, from: Dict = dict): string {
   const keys = key.split('\.')
   let result: any = from
 
   for (let k of keys) {
     result = result[k]
-    if (result == undefined) return from === fallback ? key : _(key, options, fallback)
+    if (result == undefined) return from === fallback ? key : _(key, values, fallback)
   }
 
-  if (result && options?.values) result = replaceValues(lang, result, options.values)
+  if (result && values) result = replaceValues(result, values)
   return result ?? key
 }
 
@@ -81,20 +81,20 @@ export function __(key: string): string|undefined {
   return result != key ? result : undefined
 }
 
-function replaceValues(lang: string, text: string, values: object) {
+function replaceValues(text: string, values: object) {
   let lastPos = 0, bracePos = 0, result = ''
   while ((bracePos = text.indexOf('{', lastPos)) >= 0) {
     result += text.substring(lastPos, bracePos)
     let closingPos = text.indexOf('}', bracePos)
     const textToReplace = text.substring(bracePos + 1, closingPos)
-    result += replacePlaceholder(textToReplace, values, lang)
+    result += replacePlaceholder(textToReplace, values)
     lastPos = closingPos + 1
   }
   result += text.substring(lastPos)
   return result
 }
 
-function replacePlaceholder(text: string, values: object, lang: string) {
+function replacePlaceholder(text: string, values: object) {
   const pluralTokens = text.split('|')
   const field = pluralTokens[0]
   if (pluralTokens.length == 1) return values[field] ?? field
