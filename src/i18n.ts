@@ -2,6 +2,7 @@ export type Dict = Record<string, any>
 export type Values = {[name: string]: any}
 
 export let jsonPath = '/i18n/'
+export let version = ''
 export let cookieName = 'LANG'
 
 export let langs = ['en']
@@ -18,6 +19,7 @@ export interface Options {
   dicts?: {[lang: string]: Dict}
   selectLang?: () => string|undefined
   jsonPath?: string
+  version?: string
   cookieName?: string
 }
 
@@ -26,6 +28,7 @@ export async function init(opts: Options) {
   defaultLang = opts.defaultLang ?? langs[0]
   lang = opts.lang ?? detectLang(opts.selectLang)
   if (opts.jsonPath) jsonPath = opts.jsonPath
+  if (opts.version) version = opts.version
   if (opts.cookieName) cookieName = opts.cookieName
   if (opts.dicts) {
     dict = opts.dicts[lang]
@@ -57,7 +60,7 @@ async function load() {
 }
 
 function loadJson(lang: string) {
-  return fetch(`${jsonPath}${lang}.json?${window['version']}`).then(r => r.json())
+  return fetch(`${jsonPath}${lang}.json${version ? '?' + version : ''}`).then(r => r.json())
 }
 
 export function ensureSupportedLang(lang: string) {
