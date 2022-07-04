@@ -103,12 +103,12 @@ function replacePlaceholder(text: string, values: Values) {
   const field = pluralTokens[0]
   if (pluralTokens.length == 1) return values[field] ?? field
 
-  const pluralRules = new Intl.PluralRules(lang)
-  const key = values[field] === 0 ? 'zero' : pluralRules.select(values[field])
+  const key = new Intl.PluralRules(lang).select(values[field])
+  const zeroKey = values[field] === 0 ? 'zero' : ''
 
   for (let i = 1; i < pluralTokens.length; i++) {
     const [candidateKey, candidateText] = pluralTokens[i].split(':', 2)
-    if (candidateKey === key) return candidateText.replace('#', values[field])
+    if (candidateKey === key || candidateKey == zeroKey) return candidateText.replace('#', values[field])
   }
   return field
 }

@@ -34,12 +34,14 @@ describe('i18n', () => {
   it('translate strings with plurals', () => {
     const dict = {
       key: 'Testing {count|zero:nothing|one:a single translation|other:# translations!}',
-      key2: 'Testing {count|zero:nothing|one:a single translation|other:# translations but don\'t \#change this!}'
+      key2: 'Testing {count|zero:nothing|one:a single translation|other:# translations but don\'t \#change this!}',
+      keyNoZero: 'Testing {count|one:# translation|other:# translations}'
     }
     expect(_('key', {count: 0}, dict)).to.equal("Testing nothing")
     expect(_('key', {count: 1}, dict)).to.equal("Testing a single translation")
     expect(_('key', {count: 5}, dict)).to.equal("Testing 5 translations!")
     expect(_('key2', {count: 12}, dict)).to.equal("Testing 12 translations but don't #change this!")
+    expect(_('keyNoZero', {count: 0}, dict)).to.equal("Testing 0 translations")
   })
 
   it('translate template with plurals and regular substitution', () => {
