@@ -51,10 +51,10 @@ export function rememberLang(lang: string) {
 
 async function load() {
   if (!langs.includes(lang)) lang = defaultLang
-  const promises = [await loadJson(lang).then(r => Object.assign(dict, r))]
+  const promises = [loadJson(lang).then(r => Object.assign(dict, r))]
   if (defaultLang != lang) {
     fallback = {}
-    promises.push(await loadJson(defaultLang).then(r => Object.assign(fallback, r)))
+    promises.push(loadJson(defaultLang).then(r => Object.assign(fallback, r)))
   }
   return Promise.all(promises)
 }
