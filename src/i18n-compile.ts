@@ -6,15 +6,14 @@ import * as path from 'path'
 const src = process.argv[2]
 const dst = process.argv[3]
 if (src && dst) {
-  i18nCompile(src, dst).then(() => {
-    console.log('done.')
-  })
+  i18nCompile(src, dst)
+  console.log('done.')
 } else {
-  console.error('use: npm run i18n-compile.js {srcDir} {dstDir}')
+  console.error('usage: node i18n-compile <srcDir> <dstDir>')
 }
 
-async function readJsonFile(filePath: string): Promise<any> {
-  return await JSON.parse(fs.readFileSync(filePath, 'utf-8'))
+function readJsonFile(filePath: string) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
 }
 
 function writeJson(outputPath: string, data: any) {
@@ -36,20 +35,20 @@ export function mergeJson(dictionary: Dict, defaultDictionary: Dict, parent: str
   return dictionary
 }
 
-export async function i18nCompile(sourceDir: string, destinationDir: string) {
+export function i18nCompile(sourceDir: string, destinationDir: string) {
   fs.mkdirSync(destinationDir, {recursive: true})
-  const languages = await copy(sourceDir, destinationDir, 'langs.json')
-  const defaultTranslations = await copy(sourceDir, destinationDir, `${languages[0]}.json`)
+  const languages = processFile(sourceDir, destinationDir, 'langs.json')
+  const defaultTranslations = processFile(sourceDir, destinationDir, `${languages[0]}.json`)
   for (let i = 1; i < languages.length; i++) {
-    console.warn(`compile ${languages[i]}`)
-    await copy(sourceDir, destinationDir, `${languages[i]}.json`, (translations) => {
+    console.log(`compiling ${languages[i]}`)
+    processFile(sourceDir, destinationDir, `${languages[i]}.json`, (translations) => {
       return mergeJson(translations, defaultTranslations)
     })
   }
 }
 
-async function copy(src: string, dst: string, fileName: string, conversion: ((a: any) => any) = (a) => a) {
-  let converted = conversion(await readJsonFile(path.join(src, fileName)))
+function processFile(src: string, dst: string, fileName: string, conversion: ((a: any) => any) = (a) => a) {
+  let converted = conversion(readJsonFile(path.join(src, fileName)))
   writeJson(path.join(dst, fileName), converted)
   return converted
 }
