@@ -47,8 +47,8 @@ E.g. in Svelte you would use a store to set/retrieve the function and then use i
 
 
 ### Post compilation step
-you can merge translation files in post i18nCompile step that no fallback is needed in runtime.
+You can merge translation files by adding missing keys/values from default lang to all others at build time, not needing to do fallback for untranslated keys at runtime.
 
 ```bash
-npm run i18n-i18n-compile.js {srcDir} {dstDir}
+node i18n-compile {srcDir} {dstDir}
 ```
