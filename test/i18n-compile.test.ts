@@ -1,4 +1,4 @@
-import {mergeJson} from '../src/i18n-compile'
+import {mergeJson} from '../src/i18n-compile.js'
 import {expect} from 'chai'
 
 describe('compile translations', () => {
