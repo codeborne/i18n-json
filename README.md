@@ -44,3 +44,11 @@ If using a SPA framework and want to switch languages on-the-fly (without page r
 small wrapper for the `_` function.
 
 E.g. in Svelte you would use a store to set/retrieve the function and then use it as `$_()`.
+
+
+### Post compilation step
+you can merge translation files in post i18nCompile step that no fallback is needed in runtime.
+
+```bash
+npm run i18n-i18n-compile.js {srcDir} {dstDir}
+```

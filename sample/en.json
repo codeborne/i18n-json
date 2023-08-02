@@ -1,6 +1,7 @@
 {
   "title": "Just a sample",
   "contacts": {
-    "email": "E-mail"
+    "email": "E-mail",
+    "phone": "Phone"
   }
 }
