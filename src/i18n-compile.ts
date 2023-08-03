@@ -19,7 +19,7 @@ function readJsonFile(filePath: string) {
 }
 
 function writeJson(outputPath: string, data: any) {
-  fs.writeFileSync(outputPath, JSON.stringify(data, null, 2), 'utf-8')
+  fs.writeFileSync(outputPath, JSON.stringify(data), 'utf-8')
 }
 
 export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destinationDir: string) {
