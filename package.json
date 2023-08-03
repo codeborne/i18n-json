@@ -1,6 +1,6 @@
 {
   "name": "@codeborne/i18n-json",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Simple framework-neutral json-based translations with no dependencies",
   "type": "module",
   "files": ["build/src", "build/bin"],

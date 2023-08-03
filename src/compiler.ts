@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import {mergeDicts} from './i18n'
+import {mergeDicts} from './i18n.js'
 import * as path from 'path'
 
 function readJsonFile(filePath: string) {
