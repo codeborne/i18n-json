@@ -34,17 +34,15 @@ export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destin
 }
 
 export function mergeDicts(dict: Dict, defaultDict: Dict, parent = ''): any {
-  let numFallbacks = 0
   for (const key in defaultDict) {
-    const fullKey = parent + '.' + key
+    const fullKey = (parent ? parent + '.' : '') + key
     if (typeof dict[key] === 'object' && typeof defaultDict[key] === 'object')
       dict[key] = mergeDicts(dict[key], defaultDict[key], fullKey)
     else if (!dict[key]) {
       dict[key] = defaultDict[key]
-      numFallbacks++
+      console.warn(`  added missing ${fullKey}`)
     }
   }
-  if (numFallbacks) console.warn(`  added ${numFallbacks} fallbacks`)
   return dict
 }
 
