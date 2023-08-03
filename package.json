@@ -6,6 +6,9 @@
   "files": ["build/src"],
   "module": "build/src/index.js",
   "types": "build/src/index.d.ts",
+  "bin": {
+    "i18n-compole": "build/src/i18n-compile.js"
+  },
   "scripts": {
     "build": "rm -fr build && tsc",
     "prepublish": "npm run build",
