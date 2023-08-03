@@ -25,9 +25,10 @@ function writeJson(outputPath: string, data: any) {
 export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destinationDir: string) {
   fs.mkdirSync(destinationDir, {recursive: true})
   const langs = processFile(sourceDir, destinationDir, 'langs.json')
-  const defaultDict = processFile(sourceDir, destinationDir, `${langs[0]}.json`)
+  const fileName = `${langs[0]}.json`
+  const defaultDict = processFile(sourceDir, destinationDir, fileName)
   for (let i = 1; i < langs.length; i++) {
-    console.log(`compiling ${langs[i]}`)
+    console.log(`compiling ` + fileName)
     processFile(sourceDir, destinationDir, `${langs[i]}.json`, dict => mergeDicts(dict, defaultDict))
   }
 }
