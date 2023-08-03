@@ -6,7 +6,7 @@ import * as path from 'path'
 const src = process.argv[2]
 const dst = process.argv[3]
 if (src && dst) {
-  i18nCompile(src, dst)
+  mergeLanguageFilesWithDefaultFallbacks(src, dst)
   console.log('done.')
 } else {
   console.error('usage: node i18n-compile <srcDir> <dstDir>')
@@ -20,31 +20,29 @@ function writeJson(outputPath: string, data: any) {
   fs.writeFileSync(outputPath, JSON.stringify(data, null, 2), 'utf-8')
 }
 
-export function mergeJson(dictionary: Dict, defaultDictionary: Dict, parent: string = '/'): any {
-  for (const key in defaultDictionary) {
-    let jsonPointer = path.join(parent, key)
-    if (typeof dictionary[key] === 'object' && typeof defaultDictionary[key] === 'object') {
-      dictionary[key] = mergeJson(dictionary[key], defaultDictionary[key], jsonPointer)
-    } else {
-      if (!dictionary[key]) {
-        console.warn(`[WARNING] Add missing property ${jsonPointer} to translation`)
-        dictionary[key] = defaultDictionary[key]
-      }
-    }
+export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destinationDir: string) {
+  fs.mkdirSync(destinationDir, {recursive: true})
+  const langs = processFile(sourceDir, destinationDir, 'langs.json')
+  const defaultDict = processFile(sourceDir, destinationDir, `${langs[0]}.json`)
+  for (let i = 1; i < langs.length; i++) {
+    console.log(`compiling ${langs[i]}`)
+    processFile(sourceDir, destinationDir, `${langs[i]}.json`, dict => mergeDicts(dict, defaultDict))
   }
-  return dictionary
 }
 
-export function i18nCompile(sourceDir: string, destinationDir: string) {
-  fs.mkdirSync(destinationDir, {recursive: true})
-  const languages = processFile(sourceDir, destinationDir, 'langs.json')
-  const defaultTranslations = processFile(sourceDir, destinationDir, `${languages[0]}.json`)
-  for (let i = 1; i < languages.length; i++) {
-    console.log(`compiling ${languages[i]}`)
-    processFile(sourceDir, destinationDir, `${languages[i]}.json`, (translations) => {
-      return mergeJson(translations, defaultTranslations)
-    })
+export function mergeDicts(dict: Dict, defaultDict: Dict, parent = ''): any {
+  let numFallbacks = 0
+  for (const key in defaultDict) {
+    const fullKey = parent + '.' + key
+    if (typeof dict[key] === 'object' && typeof defaultDict[key] === 'object')
+      dict[key] = mergeDicts(dict[key], defaultDict[key], fullKey)
+    else if (!dict[key]) {
+      dict[key] = defaultDict[key]
+      numFallbacks++
+    }
   }
+  if (numFallbacks) console.warn(`  added ${numFallbacks} fallbacks`)
+  return dict
 }
 
 function processFile(src: string, dst: string, fileName: string, conversion: ((a: any) => any) = (a) => a) {
