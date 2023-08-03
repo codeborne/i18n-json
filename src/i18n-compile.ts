@@ -2,7 +2,7 @@
 
 import * as process from 'process'
 import * as fs from 'fs'
-import type {Dict} from './i18n'
+import {mergeDicts} from './i18n'
 import * as path from 'path'
 
 const src = process.argv[2]
@@ -37,19 +37,6 @@ export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destin
     console.log(`compiling ` + fileName)
     processFile(sourceDir, destinationDir, fileName, dict => mergeDicts(dict, defaultDict, noTranslate))
   }
-}
-
-export function mergeDicts(dict: Dict, defaultDict: Dict, noTranslate: Set<string>, parent = ''): any {
-  for (const key in defaultDict) {
-    const fullKey = (parent ? parent + '.' : '') + key
-    if (typeof dict[key] === 'object' && typeof defaultDict[key] === 'object')
-      dict[key] = mergeDicts(dict[key], defaultDict[key], noTranslate, fullKey)
-    else if (!dict[key]) {
-      dict[key] = defaultDict[key]
-      if (!noTranslate.has(fullKey)) console.warn(`  added missing ${fullKey}`)
-    }
-  }
-  return dict
 }
 
 function processFile(src: string, dst: string, fileName: string, conversion: ((a: any) => any) = (a) => a) {

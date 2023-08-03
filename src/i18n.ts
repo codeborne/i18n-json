@@ -11,7 +11,6 @@ export let lang = defaultLang
 export let fallbackToDefault = true
 
 let dict: Dict = {}
-let fallback: Dict = dict
 
 export interface Options {
   langs: string[],
@@ -35,9 +34,8 @@ export async function init(opts: Options) {
   if (opts.cookieName) cookieName = opts.cookieName
   if (opts.dicts) {
     dict = opts.dicts[lang]
-    fallback = opts.dicts[defaultLang]
-  }
-  else await load()
+    if (fallbackToDefault) mergeDicts(dict, opts.dicts[defaultLang])
+  } else await loadDict()
 }
 
 export function detectLang(selectLang?: () => string|undefined, host = location.host, cookies = document.cookie) {
@@ -52,12 +50,14 @@ export function rememberLang(lang: string) {
   document.cookie = `${cookieName}=${lang};path=/`
 }
 
-async function load() {
+async function loadDict() {
   if (!langs.includes(lang)) lang = defaultLang
   const promises = [loadJson(lang).then(r => dict = r)]
+  let fallback: Dict|undefined
   if (defaultLang != lang && fallbackToDefault)
     promises.push(loadJson(defaultLang).then(r => fallback = r))
-  return Promise.all(promises)
+  await Promise.all(promises)
+  if (fallback) mergeDicts(dict, fallback)
 }
 
 function loadJson(lang: string) {
@@ -74,7 +74,7 @@ export function _(key: string, values?: Values, from: Dict = dict): string {
 
   for (let k of keys) {
     result = result[k]
-    if (result == undefined) return fallbackToDefault && from !== fallback ? _(key, values, fallback) : key
+    if (!result) break
   }
 
   if (result && values) result = replaceValues(result, values)
@@ -84,6 +84,19 @@ export function _(key: string, values?: Values, from: Dict = dict): string {
 export function __(key: string, values?: Values): string|undefined {
   const result = _(key, values)
   return result != key ? result : undefined
+}
+
+export function mergeDicts(dict: Dict, defaultDict: Dict, noTranslate: Set<string> = new Set(), parent = ''): any {
+  for (const key in defaultDict) {
+    const fullKey = (parent ? parent + '.' : '') + key
+    if (typeof dict[key] === 'object' && typeof defaultDict[key] === 'object')
+      dict[key] = mergeDicts(dict[key], defaultDict[key], noTranslate, fullKey)
+    else if (!dict[key]) {
+      dict[key] = defaultDict[key]
+      if (!noTranslate.has(fullKey)) console.warn(`  added missing ${fullKey}`)
+    }
+  }
+  return dict
 }
 
 function replaceValues(text: string, values: Values) {
