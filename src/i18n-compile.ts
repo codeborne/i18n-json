@@ -25,22 +25,28 @@ function writeJson(outputPath: string, data: any) {
 export function mergeLanguageFilesWithDefaultFallbacks(sourceDir: string, destinationDir: string) {
   fs.mkdirSync(destinationDir, {recursive: true})
   const langs = processFile(sourceDir, destinationDir, 'langs.json')
+  console.log('Langs: ', langs)
+  let noTranslate: Set<string> = new Set()
+  try {
+    noTranslate = new Set(readJsonFile(path.join(sourceDir, 'dont-translate-keys.json')))
+    console.log('dont-translate-keys: ', noTranslate)
+  } catch (e) {}
   const defaultDict = processFile(sourceDir, destinationDir, `${langs[0]}.json`)
   for (let i = 1; i < langs.length; i++) {
     const fileName = langs[i] + '.json'
     console.log(`compiling ` + fileName)
-    processFile(sourceDir, destinationDir, fileName, dict => mergeDicts(dict, defaultDict))
+    processFile(sourceDir, destinationDir, fileName, dict => mergeDicts(dict, defaultDict, noTranslate))
   }
 }
 
-export function mergeDicts(dict: Dict, defaultDict: Dict, parent = ''): any {
+export function mergeDicts(dict: Dict, defaultDict: Dict, noTranslate: Set<string>, parent = ''): any {
   for (const key in defaultDict) {
     const fullKey = (parent ? parent + '.' : '') + key
     if (typeof dict[key] === 'object' && typeof defaultDict[key] === 'object')
-      dict[key] = mergeDicts(dict[key], defaultDict[key], fullKey)
+      dict[key] = mergeDicts(dict[key], defaultDict[key], noTranslate, fullKey)
     else if (!dict[key]) {
       dict[key] = defaultDict[key]
-      console.warn(`  added missing ${fullKey}`)
+      if (!noTranslate.has(fullKey)) console.warn(`  added missing ${fullKey}`)
     }
   }
   return dict
