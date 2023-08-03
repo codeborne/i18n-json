@@ -1,16 +1,16 @@
 {
   "name": "@codeborne/i18n-json",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Simple framework-neutral json-based translations with no dependencies",
   "type": "module",
-  "files": ["build/src"],
+  "files": ["build/src", "build/bin"],
   "module": "build/src/index.js",
   "types": "build/src/index.d.ts",
   "bin": {
-    "i18n-compile": "build/src/i18n-compile.js"
+    "i18n-compile": "build/bin/i18n-compile.js"
   },
   "scripts": {
-    "build": "rm -fr build && tsc && chmod +x build/src/i18n-compile.js",
+    "build": "rm -fr build && tsc && chmod +x build/bin/i18n-compile.js",
     "prepublish": "npm run build",
     "test": "npm run build && mocha 'build/**/*.test.js'"
   },

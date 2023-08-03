@@ -1,18 +1,6 @@
-#!/usr/bin/env node
-
-import * as process from 'process'
 import * as fs from 'fs'
 import {mergeDicts} from './i18n'
 import * as path from 'path'
-
-const src = process.argv[2]
-const dst = process.argv[3]
-if (src && dst) {
-  mergeLanguageFilesWithDefaultFallbacks(src, dst)
-  console.log('done.')
-} else {
-  console.error('usage: node i18n-compile <srcDir> <dstDir>')
-}
 
 function readJsonFile(filePath: string) {
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'))
