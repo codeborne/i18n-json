@@ -52,3 +52,5 @@ You can merge translation files by adding missing keys/values from default lang 
 ```bash
 i18n-compile <srcDir> <dstDir>
 ```
+
+Then disable dynamic fallback to default in prod mode, e.g. `await init({langs, fallbackToDefault: import.meta.env.DEV})`.

@@ -8,6 +8,7 @@ export let cookieName = 'LANG'
 export let langs = ['en']
 export let defaultLang = 'en'
 export let lang = defaultLang
+export let fallbackToDefault = true
 
 let dict: Dict = {}
 let fallback: Dict = dict
@@ -16,6 +17,7 @@ export interface Options {
   langs: string[],
   defaultLang?: string,
   lang?: string,
+  fallbackToDefault?: boolean
   dicts?: {[lang: string]: Dict}
   selectLang?: () => string|undefined
   jsonPath?: string
@@ -26,6 +28,7 @@ export interface Options {
 export async function init(opts: Options) {
   langs = opts.langs
   defaultLang = opts.defaultLang ?? langs[0]
+  fallbackToDefault = opts.fallbackToDefault ?? true
   lang = opts.lang ?? detectLang(opts.selectLang)
   if (opts.jsonPath) jsonPath = opts.jsonPath
   if (opts.version) version = opts.version
@@ -51,11 +54,9 @@ export function rememberLang(lang: string) {
 
 async function load() {
   if (!langs.includes(lang)) lang = defaultLang
-  const promises = [loadJson(lang).then(r => Object.assign(dict, r))]
-  if (defaultLang != lang) {
-    fallback = {}
-    promises.push(loadJson(defaultLang).then(r => Object.assign(fallback, r)))
-  }
+  const promises = [loadJson(lang).then(r => dict = r)]
+  if (defaultLang != lang && fallbackToDefault)
+    promises.push(loadJson(defaultLang).then(r => fallback = r))
   return Promise.all(promises)
 }
 
@@ -68,12 +69,12 @@ export function ensureSupportedLang(lang: string) {
 }
 
 export function _(key: string, values?: Values, from: Dict = dict): string {
-  const keys = key.split('\.')
+  const keys = key.split('.')
   let result: any = from
 
   for (let k of keys) {
     result = result[k]
-    if (result == undefined) return from === fallback ? key : _(key, values, fallback)
+    if (result == undefined) return fallbackToDefault && from !== fallback ? _(key, values, fallback) : key
   }
 
   if (result && values) result = replaceValues(result, values)
