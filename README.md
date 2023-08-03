@@ -50,5 +50,5 @@ E.g. in Svelte you would use a store to set/retrieve the function and then use i
 You can merge translation files by adding missing keys/values from default lang to all others at build time, not needing to do fallback for untranslated keys at runtime.
 
 ```bash
-node i18n-compile {srcDir} {dstDir}
+i18n-compile <srcDir> <dstDir>
 ```
