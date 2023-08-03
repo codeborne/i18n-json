@@ -10,7 +10,7 @@
     "i18n-compile": "build/src/i18n-compile.js"
   },
   "scripts": {
-    "build": "rm -fr build && tsc",
+    "build": "rm -fr build && tsc && chmod +x build/src/i18n-compile.js",
     "prepublish": "npm run build",
     "test": "npm run build && mocha 'build/**/*.test.js'"
   },
