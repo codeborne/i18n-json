@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as process from 'process'
 import * as fs from 'fs'
 import type {Dict} from './i18n'
