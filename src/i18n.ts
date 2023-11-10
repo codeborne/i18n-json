@@ -34,7 +34,7 @@ export async function init(opts: Options) {
   if (opts.cookieName) cookieName = opts.cookieName
   if (opts.dicts) {
     dict = opts.dicts[lang]
-    if (fallbackToDefault) mergeDicts(dict, opts.dicts[defaultLang])
+    if (fallbackToDefault && lang != defaultLang) mergeDicts(dict, opts.dicts[defaultLang])
   } else await loadDict()
 }
 
