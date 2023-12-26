@@ -7,5 +7,5 @@ export * from './formatters.js'
 
 export async function init(i: Options) {
   await i18n(i)
-  formatters(lang + '-GB')
+  formatters(lang === 'en' ? lang + '-GB' : lang)
 }
