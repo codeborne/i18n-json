@@ -68,15 +68,12 @@ export function ensureSupportedLang(lang: string) {
   return langs.includes(lang) ? lang : defaultLang
 }
 
+export function resolve(key: string, from: Record<string, any> = dict): any {
+  return key.split('.').reduce((acc, key) => acc && acc[key], from)
+}
+
 export function _(key: string, values?: Values, from: Dict = dict): string {
-  const keys = key.split('.')
-  let result: any = from
-
-  for (let k of keys) {
-    result = result[k]
-    if (!result) break
-  }
-
+  let result = resolve(key, from)
   if (result && values) result = replaceValues(result, values)
   return result ?? key
 }
@@ -99,20 +96,11 @@ export function mergeDicts(dict: Dict, defaultDict: Dict, noTranslate: Set<strin
   return dict
 }
 
-function replaceValues(text: string, values: Values) {
-  let lastPos = 0, bracePos = 0, result = ''
-  while ((bracePos = text.indexOf('{', lastPos)) >= 0) {
-    result += text.substring(lastPos, bracePos)
-    let closingPos = text.indexOf('}', bracePos)
-    const textToReplace = text.substring(bracePos + 1, closingPos)
-    result += replacePlaceholder(textToReplace, values)
-    lastPos = closingPos + 1
-  }
-  result += text.substring(lastPos)
-  return result
+export function replaceValues(text: string, values: Values) {
+  return text.replace(/\{(.*?)}/g, (_, placeholder) => replacePlaceholder(placeholder, values))
 }
 
-function replacePlaceholder(text: string, values: Values) {
+export function replacePlaceholder(text: string, values: Values) {
   const pluralTokens = text.split('|')
   const field = pluralTokens[0]
   if (pluralTokens.length == 1) return values[field] ?? field
